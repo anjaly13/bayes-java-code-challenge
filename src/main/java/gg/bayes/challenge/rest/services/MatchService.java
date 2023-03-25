@@ -33,24 +33,25 @@ public class MatchService {
 
     @Autowired
     private CombatLogEntryRepository combatLogEntryRepository;
-    /**
-     * [00:08:46.693] npc_dota_hero_snapfire buys item item_clarity
-     * [timestamp] [hero/character] buys item [item name]
-     * @param combatLogs
-     * @return
-     */
 
+    /**
+     * Splitting the event logs by line and processing it. If the required details are available in the result save both
+     * match and combat log details database.
+     *
+     * @param combatLogs the logs of the event
+     * @return Match id associated with the event
+     * @throws ParseException
+     */
     @Transactional(rollbackOn = Exception.class)
     public long saveCombatLogs(String combatLogs) throws ParseException {
         String [] logsByLine = combatLogs.split("\n");
-        String [] wordsInLog = null;
         MatchEntity match = new MatchEntity();
         match = matchRepository.save(match);
 
         Set<CombatLogEntryEntity> combatLogEntries = new LinkedHashSet<>();
         for(String line : logsByLine){
             CombatLogEntryEntity combatLogEntry = matchComponent
-                    .createCombatLog(new CombatLogEntryEntity(),match,"buys",line);
+                    .createCombatLog(new CombatLogEntryEntity(),match,line);
             if(combatLogEntry == null){
                 continue;
             }
@@ -61,22 +62,58 @@ public class MatchService {
         return match.getId();
     }
 
-    public List<HeroKills> getHerosAndKills(Long matchId) {
+    /**
+     * Fetch the details of hero and the kills they made by querying in the database based on the match id and other details
+     *
+     * @param matchId Match id of the event
+     * @return Collection of hero and the number of kills they made
+     */
+    public List<HeroKills> getHeroAndKills(Long matchId) {
         return combatLogEntryRepository.findAllHeroAndKillCount(matchId);
     }
 
+    /**
+     * Fetch the hero and teh items they purchased during the event by querying the database
+     *
+     * @param matchId match id of the event
+     * @param heroName name of one of the hero in the match
+     * @return Collection of heo and items they purchased in during the event
+     */
     public List<HeroItem> getHeroAndItems(Long matchId, String heroName) {
-        if (StringUtils.isBlank(heroName)) return new ArrayList<>();
+        if (StringUtils.isBlank(heroName)) {
+            log.info("Null/ Empty hero name input passed while fetching hero and items");
+            return new ArrayList<>();
+        };
         return combatLogEntryRepository.findItemAndTimestampByMatchIdAndActorAndType(matchId,heroName,CombatLogEntryEntity.Type.ITEM_PURCHASED);
     }
 
+    /**
+     * Fetch the hero and the spell cast, by querying the database
+     *
+     * @param matchId match id of the event
+     * @param heroName name of one of the hero in the match
+     * @return Collection of Hero and the spell cast
+     */
     public List<HeroSpells> getSpellsAndCount(Long matchId, String heroName) {
-        if (StringUtils.isBlank(heroName)) return new ArrayList<>();
+        if (StringUtils.isBlank(heroName)) {
+            log.info("Null/ Empty hero name input passed while fetching spells and count");
+            return new ArrayList<>();
+        };
         return combatLogEntryRepository.fetchCastsSpellAndCount(matchId,heroName);
     }
 
+    /**
+     * Fetch hero got attacked and the damages happened by querying teh database
+     *
+     * @param matchId match id of the event
+     * @param heroName name of one of the hero in the match
+     * @return Collection of hero got attached and the damages caused
+     */
     public List<HeroDamage> getHeroAndDamages(Long matchId, String heroName) {
-        if (StringUtils.isBlank(heroName)) return new ArrayList<>();
+        if (StringUtils.isBlank(heroName)) {
+            log.info("Null/ Empty hero name input passed while fetching hero and damage");
+            return new ArrayList<>();
+        };
         return combatLogEntryRepository.findHeroAndDamages(matchId,heroName);
 
     }

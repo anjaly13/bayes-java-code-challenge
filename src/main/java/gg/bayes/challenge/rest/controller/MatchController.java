@@ -36,8 +36,13 @@ public class MatchController {
      */
     @PostMapping(consumes = MediaType.TEXT_PLAIN_VALUE)
     public ResponseEntity<Long> ingestCombatLog(@RequestBody @NotBlank String combatLog) throws ParseException {
-//        throw new NotImplementedException("TODO: implement");
-        return new ResponseEntity<>(matchService.saveCombatLogs(combatLog), HttpStatus.OK);
+        try{
+            return new ResponseEntity<>(matchService.saveCombatLogs(combatLog), HttpStatus.OK);
+        }
+        catch (Exception e){
+            log.error("Combat log processing failed. Message: {}",e.getMessage());
+            return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
+        }
     }
 
     /**
@@ -51,9 +56,13 @@ public class MatchController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity<List<HeroKills>> getMatch(@PathVariable("matchId") Long matchId) {
-
-        return new ResponseEntity<>(matchService.getHerosAndKills(matchId),HttpStatus.OK);
-//        throw new NotImplementedException("TODO: implement");
+        try{
+            return new ResponseEntity<>(matchService.getHeroAndKills(matchId),HttpStatus.OK);
+        }
+        catch (Exception e){
+            log.error("Get match details failed. Message: {}",e.getMessage());
+            return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
+        }
     }
 
     /**
@@ -70,8 +79,13 @@ public class MatchController {
     public ResponseEntity<List<HeroItem>> getHeroItems(
             @PathVariable("matchId") Long matchId,
             @PathVariable("heroName") String heroName) {
-
-        return new ResponseEntity<>(matchService.getHeroAndItems(matchId,heroName),HttpStatus.OK);
+        try{
+            return new ResponseEntity<>(matchService.getHeroAndItems(matchId,heroName),HttpStatus.OK);
+        }
+        catch (Exception e){
+            log.error("Fetching hero and items failed. Message: {}",e.getMessage());
+            return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
+        }
     }
 
     /**
@@ -88,9 +102,13 @@ public class MatchController {
     public ResponseEntity<List<HeroSpells>> getHeroSpells(
             @PathVariable("matchId") Long matchId,
             @PathVariable("heroName") String heroName) {
-
-        return new ResponseEntity<>(matchService.getSpellsAndCount(matchId,heroName),HttpStatus.OK);
-//        throw new NotImplementedException("TODO: implement");
+        try{
+            return new ResponseEntity<>(matchService.getSpellsAndCount(matchId,heroName),HttpStatus.OK);
+        }
+        catch (Exception e){
+            log.error("Fetching hero and spells failed. Message: {}",e.getMessage());
+            return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
+        }
     }
 
     /**
@@ -107,8 +125,12 @@ public class MatchController {
     public ResponseEntity<List<HeroDamage>> getHeroDamages(
             @PathVariable("matchId") Long matchId,
             @PathVariable("heroName") String heroName) {
-
-        return new ResponseEntity<>(matchService.getHeroAndDamages(matchId,heroName),HttpStatus.OK);
-//        throw new NotImplementedException("TODO: implement");
+        try{
+            return new ResponseEntity<>(matchService.getHeroAndDamages(matchId,heroName),HttpStatus.OK);
+        }
+        catch (Exception e){
+            log.error("Fetching hero and damages failed. Message: {}",e.getMessage());
+            return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
+        }
     }
 }

@@ -15,7 +15,6 @@ import java.util.List;
 @Repository
 public interface CombatLogEntryRepository extends JpaRepository<CombatLogEntryEntity, Long> {
 
-    // TODO: add the necessary methods for your solution
     @Query(value = "SELECT new gg.bayes.challenge.rest.model.HeroKills(actor, COUNT(id)) FROM CombatLogEntryEntity WHERE match.id=:matchId AND type='HERO_KILLED' Group By actor")
     List<HeroKills> findAllHeroAndKillCount(@Param("matchId") Long matchId);
 
