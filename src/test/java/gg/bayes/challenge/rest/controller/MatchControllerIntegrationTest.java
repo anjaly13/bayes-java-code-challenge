@@ -1,17 +1,23 @@
 package gg.bayes.challenge.rest.controller;
 
+import gg.bayes.challenge.rest.services.MatchService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.nio.charset.StandardCharsets;
+import java.text.ParseException;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -33,6 +39,11 @@ class MatchControllerIntegrationTest {
     private MockMvc mvc;
 
     private Map<String, Long> matchIds;
+
+    @InjectMocks
+    private MatchController matchController;
+    @Mock
+    private MatchService matchService;
 
     @BeforeAll
     void setup() throws Exception {
@@ -66,5 +77,48 @@ class MatchControllerIntegrationTest {
                                  .andReturn()
                                  .getResponse()
                                  .getContentAsString());
+    }
+
+    @Test
+    public void getMatchTest() throws Exception {
+        String uri = "/api/match/1";
+        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.get(uri).content(String.valueOf(1))
+                .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+
+        String content = mvcResult.getResponse().getContentAsString();
+        assertThat(content);
+    }
+
+    @Test
+    public void getHeroItem() throws Exception {
+        String uri = "/api/match/1/maro/items";
+        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.get(uri).content(String.valueOf(1))
+                        .content("")
+                .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+
+        String content = mvcResult.getResponse().getContentAsString();
+        assertThat(content);
+    }
+
+    @Test
+    public void getHeroSpellTest() throws Exception {
+        String uri = "/api/match/1/maro/spells";
+        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.get(uri).content(String.valueOf(1))
+                .content("maro")
+                .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+
+        String content = mvcResult.getResponse().getContentAsString();
+        assertThat(content);
+    }
+
+    @Test
+    public void getHeroDamageTest() throws Exception {
+        String uri = "/api/match/1/maro/damage";
+        MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.get(uri).content(String.valueOf(1))
+                .content("maro")
+                .accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+
+        String content = mvcResult.getResponse().getContentAsString();
+        assertThat(content);
     }
 }
