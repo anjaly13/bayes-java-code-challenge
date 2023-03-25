@@ -5,5 +5,11 @@ import lombok.Value;
 @Value
 public class HeroKills {
     String hero;
-    Integer kills;
+    Long kills;
+
+
+    public HeroKills(String hero,Long kills){
+        this.hero = hero;
+        this.kills = kills;
+    }
 }

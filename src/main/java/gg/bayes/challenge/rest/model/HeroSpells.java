@@ -5,5 +5,5 @@ import lombok.Value;
 @Value
 public class HeroSpells {
     String spell;
-    Integer casts;
+    Long casts;
 }
