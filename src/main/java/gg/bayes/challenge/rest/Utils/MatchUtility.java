@@ -68,7 +68,6 @@ public class MatchUtility {
             return 0;
         }
         String val = string.substring(0,string.length()-1);
-        System.out.println(val);
         return Integer.valueOf(val);
     }
 }

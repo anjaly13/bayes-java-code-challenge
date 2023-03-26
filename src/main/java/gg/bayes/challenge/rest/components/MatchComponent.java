@@ -38,7 +38,6 @@ public class MatchComponent {
             combatLogEntryEntity.setActor(hero);
             combatLogEntryEntity.setItem(item);
 
-            System.out.println(timeStamp + " " + type.toString() + " "+hero + " " + item);
             return combatLogEntryEntity;
         } else if (line.contains(CombatLogConstants.KEY_KILLED) && line.contains(CombatLogConstants.HERO_PREFIX)) {
             // eg: [00:11:17.489] npc_dota_hero_snapfire is killed by npc_dota_hero_mars
@@ -59,7 +58,6 @@ public class MatchComponent {
             combatLogEntryEntity.setActor(hero);
             combatLogEntryEntity.setTarget(target);
 
-            System.out.println(timeStamp + " " + type.toString() + " "+hero + " " +target);
             return combatLogEntryEntity;
         } else if (line.contains(CombatLogConstants.KEY_CASTS) && line.contains(CombatLogConstants.HERO_PREFIX)) {
             // eg: [00:11:19.622] npc_dota_hero_pangolier casts ability pangolier_swashbuckle (lvl 1) on dota_unknown
@@ -83,7 +81,6 @@ public class MatchComponent {
             combatLogEntryEntity.setAbility(ability);
             combatLogEntryEntity.setAbilityLevel(abilityLevel);
 
-            System.out.println(timeStamp + " " + type.toString() + " "+hero + " " + target + " " + ability +" " + abilityLevel);
             return combatLogEntryEntity;
 
         } else if (line.contains(CombatLogConstants.KEY_HITS) && line.contains(CombatLogConstants.HERO_PREFIX)) {
@@ -106,7 +103,6 @@ public class MatchComponent {
             combatLogEntryEntity.setTarget(target);
             combatLogEntryEntity.setDamage(Integer.valueOf(damage));
 
-            System.out.println(timeStamp + " " + type.toString() + " "+hero + " " + target +" " + damage);
             return combatLogEntryEntity;
         }else {
             // not need to split the lines at all
