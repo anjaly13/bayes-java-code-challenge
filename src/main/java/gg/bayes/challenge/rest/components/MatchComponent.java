@@ -45,8 +45,8 @@ public class MatchComponent {
             String [] wordsInLog = line.split(CombatLogConstants.SPACE);
             long timeStamp = MatchUtility.convertLogTime(wordsInLog[0]);
             CombatLogEntryEntity.Type type = CombatLogEntryEntity.Type.HERO_KILLED;
-            String hero = MatchUtility.getHero(wordsInLog[CombatLogConstants.KILLED_HERO]);
             String target = MatchUtility.getHero(wordsInLog[CombatLogConstants.KILLED_TARGET]);
+            String hero = MatchUtility.getHero(wordsInLog[CombatLogConstants.KILLED_HERO]);
 
             if(StringUtils.isBlank(hero) || StringUtils.isBlank(target)){
                 return null;
