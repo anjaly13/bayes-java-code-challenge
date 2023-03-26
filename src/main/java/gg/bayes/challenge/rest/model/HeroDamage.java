@@ -7,7 +7,7 @@ import lombok.Value;
 public class HeroDamage {
     String target;
     @JsonProperty("damage_instances")
-    Integer damageInstances;
+    Long damageInstances;
     @JsonProperty("total_damage")
-    Integer totalDamage;
+    Long totalDamage;
 }
